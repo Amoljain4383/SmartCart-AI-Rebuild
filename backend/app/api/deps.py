@@ -81,6 +81,17 @@ def get_current_user(
     return user
 
 
+def get_optional_current_user(
+    db: Session = Depends(get_db),
+    credentials: Optional[HTTPAuthorizationCredentials] = Depends(security_scheme)
+) -> Optional[User]:
+    """Return active User if valid bearer token provided, None if guest, or raise 401 if invalid/revoked."""
+    if credentials is None or not credentials.credentials:
+        return None
+    return get_current_user(db=db, credentials=credentials)
+
+
+
 def get_current_token_payload(
     credentials: Optional[HTTPAuthorizationCredentials] = Depends(security_scheme),
     current_user: User = Depends(get_current_user)

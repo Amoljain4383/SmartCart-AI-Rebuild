@@ -32,6 +32,27 @@ FastAPI-powered backend for SmartCart AI, offering product comparison, rule-base
   - Safe handling of network timeouts and missing credentials (HTTP 503/504).
   - User order history and receipt details isolated strictly by user ownership.
   - Comprehensive documentation in [PAYPAL_INTEGRATION.md](docs/PAYPAL_INTEGRATION.md).
+- **Phase 5: AI Shopping Copilot (`POST /api/copilot`)**:
+  - Natural-language shopping inquiry interpretation powered optionally by Google Gemini (`gemini-3.8-flash`) via the `x-goog-api-key` header.
+  - Automatic local deterministic fallback parser: seamlessly operates offline if `GEMINI_API_KEY` is omitted, invalid, or rate-limited.
+  - Anti-hallucination boundary: AI strictly interprets user intent (search tokens, category, brand, budget cap). All product records, prices, shipping fees, and offer rankings are authoritatively retrieved and computed from the backend SQLite database.
+  - In-memory sliding-window rate limiting (15 inquiries per minute per user or direct client IP).
+  - Full demo transparency: all products, offers, and discounts are labeled as simulated demo data (`is_demo_data = True`).
+
+---
+
+## AI Shopping Copilot Configuration (`/api/copilot`)
+
+### Enabling Gemini via `.env` (Optional)
+Add your Google AI Studio API key to `backend/.env`:
+```env
+GEMINI_API_KEY=your_gemini_api_key_here
+GEMINI_MODEL=gemini-3.8-flash
+```
+*Note: If omitted, the backend automatically uses the deterministic rule-based fallback parser with zero downtime and zero external dependencies.*
+
+### Rate-Limiting Behavior
+The Copilot enforces a maximum of **15 requests per minute** per client (keyed by authenticated `user.id` or guest socket IP via `request.client.host`). Exceeding this quota returns `HTTP 429 Too Many Requests`. This in-memory limiter resets upon server restart and is not shared across multi-worker deployments.
 
 ---
 

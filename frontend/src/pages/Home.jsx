@@ -63,7 +63,7 @@ export default function Home() {
             </div>
             <input
               type="text"
-              placeholder="Search products (e.g., Wireless Headphones, Smart Watch, Espresso)..."
+              placeholder="Search products or ask AI (e.g., 'Headphones under ₹28,000')..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:outline-none bg-transparent"
@@ -76,6 +76,22 @@ export default function Home() {
               <ArrowRight className="w-4 h-4" />
             </button>
           </form>
+
+          {/* AI Copilot Suggestion Chips */}
+          <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
+            <span className="text-xs text-slate-500 font-medium flex items-center gap-1">
+              <Sparkles className="w-3.5 h-3.5 text-indigo-500" /> Try Copilot:
+            </span>
+            {['Sony WH-1000XM5 under ₹28,000', 'Apple Watch Series 9 under 45k', 'Kindle Paperwhite under 15k', 'Logitech mouse under 9k'].map((prompt) => (
+              <button
+                key={prompt}
+                onClick={() => navigate(`/products?copilot=${encodeURIComponent(prompt)}`)}
+                className="text-xs bg-indigo-50 hover:bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full border border-indigo-200/80 transition shadow-sm"
+              >
+                {prompt}
+              </button>
+            ))}
+          </div>
 
           {/* Value Badges */}
           <div className="mt-8 flex flex-wrap items-center justify-center gap-6 text-xs text-slate-500 font-medium">

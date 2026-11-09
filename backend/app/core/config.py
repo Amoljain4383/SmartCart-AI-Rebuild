@@ -59,5 +59,19 @@ class Settings(BaseSettings):
     PAYPAL_CURRENCY: str = "INR"
     PAYPAL_WEBHOOK_ID: Optional[str] = None
 
+    # AI Shopping Copilot (Google Gemini)
+    GEMINI_API_KEY: Optional[str] = None
+    GEMINI_MODEL: str = "gemini-3.8-flash"
+
+    @field_validator("GEMINI_API_KEY", mode="before")
+    @classmethod
+    def normalize_gemini_api_key(cls, v: Optional[str]) -> Optional[str]:
+        """Convert None, empty, or whitespace-only API keys to None, preserving non-empty keys."""
+        if v is None:
+            return None
+        if isinstance(v, str) and not v.strip():
+            return None
+        return v
+
 
 settings = Settings()

@@ -12,6 +12,7 @@ from app.api.admin import router as admin_router
 from app.api.products import router as products_router
 from app.api.recommendations import router as recommendations_router
 from app.api.orders import router as orders_router
+from app.api.copilot import router as copilot_router
 
 
 @asynccontextmanager
@@ -43,6 +44,7 @@ app.include_router(admin_router, prefix="/api/admin")
 app.include_router(products_router, prefix="/api/products")
 app.include_router(recommendations_router, prefix="/api/recommendations")
 app.include_router(orders_router, prefix="/api/orders")
+app.include_router(copilot_router, prefix="/api/copilot")
 
 # v1 Aliases for versioning
 app.include_router(auth_router, prefix="/api/v1/auth", include_in_schema=False)
@@ -50,6 +52,7 @@ app.include_router(admin_router, prefix="/api/v1/admin", include_in_schema=False
 app.include_router(products_router, prefix="/api/v1/products", include_in_schema=False)
 app.include_router(recommendations_router, prefix="/api/v1/recommendations", include_in_schema=False)
 app.include_router(orders_router, prefix="/api/v1/orders", include_in_schema=False)
+app.include_router(copilot_router, prefix="/api/v1/copilot", include_in_schema=False)
 
 
 @app.get("/", tags=["Health"])
